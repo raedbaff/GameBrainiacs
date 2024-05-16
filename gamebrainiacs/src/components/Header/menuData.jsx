@@ -8,21 +8,21 @@ const menuData = [
   },
   {
     id: 2,
-    title: "About",
-    path: "/about",
+    title: "Quizz",
+    path: "/quizz",
     newTab: false,
   },
   {
     id: 33,
-    title: "Blog",
-    path: "/blog",
+    title: "LeaderBoard",
+    path: "/leaderboard",
     newTab: false,
   },
-  {
-    id: 3,
-    title: "Support",
-    path: "/contact",
-    newTab: false,
-  },
+  // {
+  //   id: 3,
+  //   title: "Support",
+  //   path: "/contact",
+  //   newTab: false,
+  // },
 ];
 export default menuData;
