@@ -1,6 +1,6 @@
-import React from 'react'
-import SectionTitle from '../Common/SectionTitle'
-import Image from 'next/image'
+import React from "react";
+import SectionTitle from "../Common/SectionTitle";
+import Image from "next/image";
 
 const Quiz = () => {
   return (
@@ -18,17 +18,13 @@ const Quiz = () => {
               <div
                 className="mb-12 max-w-[570px] lg:mb-0"
                 data-wow-delay=".15s"
-              >
-                
-              </div>
+              ></div>
             </div>
-
-            
           </div>
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default Quiz
+export default Quiz;

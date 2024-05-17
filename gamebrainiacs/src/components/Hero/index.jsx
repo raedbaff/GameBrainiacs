@@ -15,7 +15,12 @@ const Hero = () => {
                   Brainiacs: Expand Your Gaming Mind
                 </h1>
                 <p className="mb-12 text-base !leading-relaxed text-body-color dark:text-body-color-dark sm:text-lg md:text-xl">
-                 Welcome to Brainiacs, the hub for gamers looking to broaden their gaming expertise through engaging quizzes and challenges. Join our dynamic community, compete with friends, and rise through the ranks as you delve into the rich tapestry of gaming trivia and knowledge. Ready to level up your gaming IQ? Dive into Brainiacs today!
+                  Welcome to Brainiacs, the hub for gamers looking to broaden
+                  their gaming expertise through engaging quizzes and
+                  challenges. Join our dynamic community, compete with friends,
+                  and rise through the ranks as you delve into the rich tapestry
+                  of gaming trivia and knowledge. Ready to level up your gaming
+                  IQ? Dive into Brainiacs today!
                 </p>
                 <div className="flex flex-col items-center justify-center space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
                   <Link

@@ -1,4 +1,3 @@
-
 const brandsData = [
   {
     id: 6,

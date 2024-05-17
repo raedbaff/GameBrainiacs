@@ -1,4 +1,3 @@
-
 const blogData = [
   {
     id: 1,
@@ -84,6 +83,5 @@ const blogData = [
     tags: ["Strategy"],
     publishDate: "2025",
   },
-
 ];
 export default blogData;

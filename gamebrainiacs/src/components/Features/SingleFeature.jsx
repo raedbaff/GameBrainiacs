@@ -1,4 +1,3 @@
-
 const SingleFeature = ({ feature }) => {
   const { icon, title, paragraph } = feature;
   return (

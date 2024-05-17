@@ -8,11 +8,11 @@ const Brands = () => {
       <div className="container">
         <div className="-mx-4 flex flex-wrap">
           <div className="w-full px-4">
-          <SectionTitle
-                title="Most popular quizzes Categories"
-                paragraph="These are the most popular quizzes for the most popular games out there, Complete the quiz and climb up the leaderboard"
-                mb="44px"
-              />
+            <SectionTitle
+              title="Most popular quizzes Categories"
+              paragraph="These are the most popular quizzes for the most popular games out there, Complete the quiz and climb up the leaderboard"
+              mb="44px"
+            />
             <div className="flex flex-wrap items-center justify-center rounded-sm bg-gray-light px-8 py-8 dark:bg-gray-dark sm:px-10 md:px-[50px] md:py-[40px] xl:p-[50px] 2xl:px-[70px] 2xl:py-[60px]">
               {brandsData.map((brand) => (
                 <SingleBrand key={brand.id} brand={brand} />
