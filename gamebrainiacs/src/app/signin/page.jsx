@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from 'next/link';
 
 const SigninPage = () => {
   return (
@@ -151,7 +151,7 @@ const SigninPage = () => {
                   </div>
                 </form>
                 <p className="text-center text-base font-medium text-body-color">
-                  Don’t you have an account?{" "}
+                  Don’t you have an account?{' '}
                   <Link href="/signup" className="text-primary hover:underline">
                     Sign up
                   </Link>
@@ -170,7 +170,7 @@ const SigninPage = () => {
           >
             <mask
               id="mask0_95:1005"
-              style={{ maskType: "alpha" }}
+              style={{ maskType: 'alpha' }}
               maskUnits="userSpaceOnUse"
               x="0"
               y="0"

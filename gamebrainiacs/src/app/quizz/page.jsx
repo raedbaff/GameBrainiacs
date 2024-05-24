@@ -1,16 +1,15 @@
-"use client";
-import SingleBlog from "@/components/Blog/SingleBlog";
-import blogData from "@/components/Blog/blogData";
-import Breadcrumb from "@/components/Common/Breadcrumb";
-import { useState, useEffect } from "react";
+'use client';
+import SingleBlog from '@/components/Blog/SingleBlog';
+import blogData from '@/components/Blog/blogData';
+import Breadcrumb from '@/components/Common/Breadcrumb';
+import { useState, useEffect } from 'react';
 
 const page = () => {
-  const [MaxPages, setMaxPages] = useState(0);
   const [pageCount, setPageCount] = useState(0);
   const [currentPage, setcurrentPage] = useState(1);
   const maxItemsCount = 3;
 
-  const handlePageNumberClick = (pageNumber) => {
+  const handlePageNumberClick = pageNumber => {
     setcurrentPage(pageNumber);
   };
 
@@ -47,9 +46,9 @@ const page = () => {
             {blogData
               .slice(
                 (currentPage - 1) * maxItemsCount,
-                (currentPage - 1) * maxItemsCount + maxItemsCount,
+                (currentPage - 1) * maxItemsCount + maxItemsCount
               )
-              .map((blog) => (
+              .map(blog => (
                 <div
                   key={blog.id}
                   className="w-full px-4 md:w-2/3 lg:w-1/2 xl:w-1/3 hover:scale-105"
@@ -74,7 +73,7 @@ const page = () => {
                 {Array.from({ length: pageCount }, (_, index) => (
                   <li
                     className={
-                      currentPage === index + 1 ? "mx-1 bg-primary" : "mx-1"
+                      currentPage === index + 1 ? 'mx-1 bg-primary' : 'mx-1'
                     }
                     key={index}
                   >

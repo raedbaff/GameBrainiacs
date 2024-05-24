@@ -1,4 +1,4 @@
-const PricingBox = (props) => {
+const PricingBox = props => {
   const { price, duration, packageName, subtitle, children } = props;
 
   return (
