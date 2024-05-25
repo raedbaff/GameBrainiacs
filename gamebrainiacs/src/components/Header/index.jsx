@@ -1,12 +1,15 @@
 'use client';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import ThemeToggler from './ThemeToggler';
 import menuData from './menuData';
+import { useAuth } from '@/context/AuthContext';
 
 const Header = () => {
+  const router = useRouter();
+  const { user, logout } = useAuth();
   // Navbar toggle
   const [navbarOpen, setNavbarOpen] = useState(false);
   const navbarToggleHandler = () => {
@@ -21,6 +24,10 @@ const Header = () => {
     } else {
       setSticky(false);
     }
+  };
+  const signOut = () => {
+    logout();
+    router.push('/signin');
   };
   useEffect(() => {
     window.addEventListener('scroll', handleStickyNavbar);
@@ -158,23 +165,40 @@ const Header = () => {
                   </ul>
                 </nav>
               </div>
-              <div className="flex items-center justify-end pr-16 lg:pr-0">
-                <Link
-                  href="/signin"
-                  className="hidden px-7 py-3 text-base font-medium text-dark hover:opacity-70 dark:text-white md:block"
-                >
-                  Sign In
-                </Link>
-                <Link
-                  href="/signup"
-                  className="ease-in-up shadow-btn hover:shadow-btn-hover hidden rounded-sm bg-primary px-8 py-3 text-base font-medium text-white transition duration-300 hover:bg-opacity-90 md:block md:px-9 lg:px-6 xl:px-9"
-                >
-                  Sign Up
-                </Link>
-                <div>
+              {!user ? (
+                <div className="flex items-center justify-end pr-16 lg:pr-0">
+                  <Link
+                    href="/signin"
+                    className="hidden px-7 py-3 text-base font-medium text-dark hover:opacity-70 dark:text-white md:block"
+                  >
+                    Sign In
+                  </Link>
+                  <Link
+                    href="/signup"
+                    className="ease-in-up shadow-btn hover:shadow-btn-hover hidden rounded-sm bg-primary px-8 py-3 text-base font-medium text-white transition duration-300 hover:bg-opacity-90 md:block md:px-9 lg:px-6 xl:px-9"
+                  >
+                    Sign Up
+                  </Link>
+                  <div>
+                    <ThemeToggler />
+                  </div>
+                </div>
+              ) : (
+                <div className="flex items-center justify-end pr-16 lg:pr-0">
+                  <div
+                    className="flex flex-row gap-2 justify-center items-center cursor-pointer"
+                    onClick={() => signOut()}
+                  >
+                    <img
+                      className="rounded-full w-[40px] h-[40px]"
+                      src="/images/raed.jfif"
+                      alt="profile"
+                    />
+                    <span>{user.toUpperCase()} </span>
+                  </div>
                   <ThemeToggler />
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </div>

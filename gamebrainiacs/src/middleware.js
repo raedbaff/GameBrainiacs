@@ -1,14 +1,15 @@
 import { NextResponse } from 'next/server';
 
-// This function can be marked `async` if using `await` inside
-const user = 'user';
 export function middleware(request) {
-  if (!user) {
+  const token = request.cookies.get('auth-token');
+
+  if (!token) {
     return NextResponse.redirect(new URL('/signin', request.url));
   }
+
+  return NextResponse.next();
 }
 
-// See "Matching Paths" below to learn more
 export const config = {
   matcher: '/',
 };

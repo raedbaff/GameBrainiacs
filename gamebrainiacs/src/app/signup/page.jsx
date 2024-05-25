@@ -1,6 +1,36 @@
+'use client';
+import { useAuth } from '@/context/AuthContext';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 const SignupPage = () => {
+  const [user, setUser] = useState({ username: '', email: '', password: '' });
+  const [loading, setLoading] = useState(false);
+  const { login, logout } = useAuth();
+  const router = useRouter();
+  const signUp = async e => {
+    try {
+      e.preventDefault();
+      setLoading(true);
+      const response = await fetch('/api/user/signup', {
+        method: 'POST',
+        body: JSON.stringify({
+          email: user.email,
+          username: user.username,
+          password: user.password,
+        }),
+      });
+      if (response.ok) {
+        setLoading(false);
+        const userInfo = await response.json();
+        login(userInfo.username);
+        router.push('/');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
       <section className="relative z-10 overflow-hidden pb-16 pt-36 md:pb-20 lg:pb-28 lg:pt-[180px]">
@@ -72,7 +102,7 @@ const SignupPage = () => {
                   </p>
                   <span className="hidden h-[1px] w-full max-w-[60px] bg-body-color/50 sm:block"></span>
                 </div>
-                <form>
+                <form onSubmit={signUp}>
                   <div className="mb-8">
                     <label
                       htmlFor="name"
@@ -82,9 +112,13 @@ const SignupPage = () => {
                       Full Name{' '}
                     </label>
                     <input
+                      value={user.username}
+                      onChange={e =>
+                        setUser({ ...user, username: e.target.value })
+                      }
                       type="text"
                       name="name"
-                      placeholder="Enter your full name"
+                      placeholder="Enter your Username"
                       className="border-stroke dark:text-body-color-dark dark:shadow-two w-full rounded-sm border bg-[#f8f8f8] px-6 py-3 text-base text-body-color outline-none transition-all duration-300 focus:border-primary dark:border-transparent dark:bg-[#2C303B] dark:focus:border-primary dark:focus:shadow-none"
                     />
                   </div>
@@ -94,9 +128,13 @@ const SignupPage = () => {
                       className="mb-3 block text-sm text-dark dark:text-white"
                     >
                       {' '}
-                      Work Email{' '}
+                      Email{' '}
                     </label>
                     <input
+                      value={user.email}
+                      onChange={e =>
+                        setUser({ ...user, email: e.target.value })
+                      }
                       type="email"
                       name="email"
                       placeholder="Enter your Email"
@@ -112,6 +150,10 @@ const SignupPage = () => {
                       Your Password{' '}
                     </label>
                     <input
+                      value={user.password}
+                      onChange={e =>
+                        setUser({ ...user, password: e.target.value })
+                      }
                       type="password"
                       name="password"
                       placeholder="Enter your Password"
@@ -163,9 +205,18 @@ const SignupPage = () => {
                     </label>
                   </div>
                   <div className="mb-6">
-                    <button className="shadow-submit dark:shadow-submit-dark flex w-full items-center justify-center rounded-sm bg-primary px-9 py-4 text-base font-medium text-white duration-300 hover:bg-primary/90">
-                      Sign up
-                    </button>
+                    {loading ? (
+                      <button
+                        disabled
+                        className="shadow-submit dark:shadow-submit-dark flex w-full items-center justify-center rounded-sm bg-primary px-9 py-4 text-base font-medium text-white duration-300 hover:bg-primary/90 opacity-50 cursor-wait"
+                      >
+                        Sign up
+                      </button>
+                    ) : (
+                      <button className="shadow-submit dark:shadow-submit-dark flex w-full items-center justify-center rounded-sm bg-primary px-9 py-4 text-base font-medium text-white duration-300 hover:bg-primary/90">
+                        Sign up
+                      </button>
+                    )}
                   </div>
                 </form>
                 <p className="text-center text-base font-medium text-body-color">

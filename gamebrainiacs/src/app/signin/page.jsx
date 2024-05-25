@@ -1,6 +1,45 @@
+'use client';
+import { useAuth } from '@/context/AuthContext';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 const SigninPage = () => {
+  const [userInfo, setUserInfo] = useState({ email: '', password: '' });
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const { user, login, logout } = useAuth();
+  const Signin = async e => {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      const response = await fetch('/api/user/login', {
+        method: 'POST',
+        body: JSON.stringify({
+          email: userInfo.email,
+          password: userInfo.password,
+        }),
+      });
+      if (response.status == 401 || response.status == 404) {
+        setLoading(false);
+        const user = {
+          email: '',
+          password: '',
+        };
+        setUserInfo(user);
+        setError('invalid credentials');
+      }
+      if (response.ok) {
+        setLoading(false);
+        const returnedUser = await response.json();
+        login(returnedUser.username);
+        router.push('/');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
       <section className="relative z-10 overflow-hidden pb-16 pt-36 md:pb-20 lg:pb-28 lg:pt-[180px]">
@@ -72,7 +111,7 @@ const SigninPage = () => {
                   </p>
                   <span className="hidden h-[1px] w-full max-w-[70px] bg-body-color/50 sm:block"></span>
                 </div>
-                <form>
+                <form onSubmit={Signin}>
                   <div className="mb-8">
                     <label
                       htmlFor="email"
@@ -81,6 +120,10 @@ const SigninPage = () => {
                       Your Email
                     </label>
                     <input
+                      value={userInfo.email}
+                      onChange={e =>
+                        setUserInfo({ ...userInfo, email: e.target.value })
+                      }
                       type="email"
                       name="email"
                       placeholder="Enter your Email"
@@ -95,6 +138,10 @@ const SigninPage = () => {
                       Your Password
                     </label>
                     <input
+                      value={userInfo.password}
+                      onChange={e =>
+                        setUserInfo({ ...userInfo, password: e.target.value })
+                      }
                       type="password"
                       name="password"
                       placeholder="Enter your Password"
@@ -145,9 +192,21 @@ const SigninPage = () => {
                     </div>
                   </div>
                   <div className="mb-6">
-                    <button className="shadow-submit dark:shadow-submit-dark flex w-full items-center justify-center rounded-sm bg-primary px-9 py-4 text-base font-medium text-white duration-300 hover:bg-primary/90">
-                      Sign in
-                    </button>
+                    {loading ? (
+                      <button
+                        disabled
+                        className="shadow-submit dark:shadow-submit-dark flex w-full items-center justify-center rounded-sm bg-primary px-9 py-4 text-base font-medium text-white duration-300 hover:bg-primary/90 opacity-50 cursor-wait"
+                      >
+                        Sign in
+                      </button>
+                    ) : (
+                      <div className="flex flex-col gap-2 justify-center items-center">
+                        <button className="shadow-submit dark:shadow-submit-dark flex w-full items-center justify-center rounded-sm bg-primary px-9 py-4 text-base font-medium text-white duration-300 hover:bg-primary/90">
+                          Sign in
+                        </button>
+                        <p className="mt-2 text-red-500 text-lg">{error}</p>
+                      </div>
+                    )}
                   </div>
                 </form>
                 <p className="text-center text-base font-medium text-body-color">
