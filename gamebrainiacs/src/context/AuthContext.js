@@ -1,20 +1,36 @@
 'use client';
 
 import Cookies from 'js-cookie';
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null); // Moved inside the function
+  const [user, setUser] = useState(null);
 
-  const login = username => {
+  // Moved inside the function
+
+  useEffect(() => {
+    const username = Cookies.get('Username');
+
+    if (username) {
+      setUser(username);
+    } else {
+      setUser(null);
+    }
+  }, []);
+
+  const login = (username, token) => {
     setUser(username);
-    Cookies.set('auth-token', 'RAED COOKIE'); // Set your auth token here
+    Cookies.set('Username', username);
+    Cookies.set('User-Token', token);
+    return Promise.resolve();
   };
 
-  const logout = () => {
+  const logout = async () => {
     setUser(null);
-    Cookies.remove('auth-token'); // Remove the auth token
+    Cookies.remove('Username');
+    Cookies.remove('User-Token');
+    return Promise.resolve();
   };
 
   return (

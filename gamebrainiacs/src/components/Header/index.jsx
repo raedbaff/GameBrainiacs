@@ -5,11 +5,13 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import ThemeToggler from './ThemeToggler';
 import menuData from './menuData';
-import { useAuth } from '@/context/AuthContext';
+import { signOut, useSession } from 'next-auth/react';
 
 const Header = () => {
   const router = useRouter();
-  const { user, logout } = useAuth();
+  // const { user, logout } = useAuth();
+  const { data: session } = useSession();
+
   // Navbar toggle
   const [navbarOpen, setNavbarOpen] = useState(false);
   const navbarToggleHandler = () => {
@@ -25,10 +27,10 @@ const Header = () => {
       setSticky(false);
     }
   };
-  const signOut = () => {
-    logout();
-    router.push('/signin');
-  };
+  // const signOut = async () => {
+  //   await logout();
+  //   router.push('/signin');
+  // };
   useEffect(() => {
     window.addEventListener('scroll', handleStickyNavbar);
   });
@@ -165,7 +167,7 @@ const Header = () => {
                   </ul>
                 </nav>
               </div>
-              {!user ? (
+              {!session ? (
                 <div className="flex items-center justify-end pr-16 lg:pr-0">
                   <Link
                     href="/signin"
@@ -194,7 +196,7 @@ const Header = () => {
                       src="/images/raed.jfif"
                       alt="profile"
                     />
-                    <span>{user.toUpperCase()} </span>
+                    <span>{session.user.name} </span>
                   </div>
                   <ThemeToggler />
                 </div>

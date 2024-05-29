@@ -6,7 +6,7 @@ import { Inter } from 'next/font/google';
 import '../../node_modules/react-modal-video/css/modal-video.css';
 import { AuthProvider } from '@/context/AuthContext';
 import './globals.css';
-
+import SessionWrapper from '@/context/SessionWrapper';
 const inter = Inter({ subsets: ['latin'] });
 
 export default function RootLayout({ children }) {
@@ -19,13 +19,13 @@ export default function RootLayout({ children }) {
       <head />
 
       <body className={`bg-[#FCFCFC] dark:bg-black ${inter.className}`}>
-        <AuthProvider>
+        <SessionWrapper>
           <Providers>
             <Header />
             {children}
             <ScrollToTop />
           </Providers>
-        </AuthProvider>
+        </SessionWrapper>
       </body>
     </html>
   );
