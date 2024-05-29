@@ -34,6 +34,7 @@ const handler = NextAuth({
               id: user._id,
               email: user.email,
               name: user.username,
+              image: user.profilePicture ?? '',
             };
           }
         } else {

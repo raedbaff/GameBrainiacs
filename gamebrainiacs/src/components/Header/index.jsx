@@ -8,8 +8,6 @@ import menuData from './menuData';
 import { signOut, useSession } from 'next-auth/react';
 
 const Header = () => {
-  const router = useRouter();
-  // const { user, logout } = useAuth();
   const { data: session } = useSession();
 
   // Navbar toggle
@@ -27,10 +25,7 @@ const Header = () => {
       setSticky(false);
     }
   };
-  // const signOut = async () => {
-  //   await logout();
-  //   router.push('/signin');
-  // };
+  const [miniNavbar, setMiniNavbar] = useState(false);
   useEffect(() => {
     window.addEventListener('scroll', handleStickyNavbar);
   });
@@ -186,19 +181,53 @@ const Header = () => {
                   </div>
                 </div>
               ) : (
-                <div className="flex items-center justify-end pr-16 lg:pr-0">
-                  <div
-                    className="flex flex-row gap-2 justify-center items-center cursor-pointer"
-                    onClick={() => signOut()}
-                  >
-                    <img
-                      className="rounded-full w-[40px] h-[40px]"
-                      src="/images/raed.jfif"
-                      alt="profile"
-                    />
-                    <span>{session.user.name} </span>
-                  </div>
-                  <ThemeToggler />
+                <div className="relative">
+                  <div className="flex items-center justify-end pr-16 lg:pr-0">
+                    <div
+                      className="flex flex-row gap-2 justify-center items-center cursor-pointer"
+                      onClick={() => setMiniNavbar(prev => !prev)}
+                    >
+                      <img
+                        className="rounded-full w-[40px] h-[40px]"
+                        src={
+                          session.user.image
+                            ? session.user.image
+                            : '/images/emptyAvatar.jpg'
+                        }
+                        alt="profile"
+                      />
+                      <span>{session.user.name} </span>
+                    </div>
+                    <ThemeToggler />
+                  </div>{' '}
+                  {miniNavbar ? (
+                    <div className="bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 z-10 absolute">
+                      <ul
+                        className="py-2 text-sm text-gray-700 dark:text-gray-200"
+                        aria-labelledby="dropdownDefaultButton"
+                      >
+                        <li>
+                          <a
+                            href="/profile"
+                            class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                          >
+                            Profile
+                          </a>
+                        </li>
+                        <li>
+                          <a
+                            href="#"
+                            className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                            onClick={() => signOut()}
+                          >
+                            Sign out
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                  ) : (
+                    <></>
+                  )}
                 </div>
               )}
             </div>
