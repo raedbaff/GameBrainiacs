@@ -1,7 +1,23 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
+import React, { useState, useEffect, Suspense } from 'react';
+import EditProfile from '@/components/EditProfile/index';
+import Loading from '@/components/Loading/index';
 
 const Profile = () => {
+  const { data: session, update } = useSession();
+  const [loadingPage, setLoadingPage] = useState(true);
+  const [user, setUser] = useState({
+    username: '',
+    email: '',
+    age: 0,
+    bio: '',
+  });
+  const [EditProfileVisible, setEditProfileVisible] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [loading, setLoading] = useState(false);
+
   const handleFileChange = async e => {
     const formdata = new FormData();
     formdata.append('file', e.target.files[0]);
@@ -14,42 +30,141 @@ const Profile = () => {
         console.log('success');
       }
     } catch (error) {
-      console.log('there is an error in the upload');
       console.log(error);
     }
   };
 
-  return (
-    <section className="overflow-hidden pb-[120px] pt-[180px]">
-      <div className="container">
-        <div className="flex items-center gap-4 p-4 dark:bg-gray-700 shadow-md rounded-lg bg-slate-200">
-          <label htmlFor="myfile">
-            {' '}
-            <img
-              src="/images/raed.jfif"
-              className="rounded-full w-20 h-20 cursor-pointer"
-              alt="Profile Picture"
-            />
-          </label>
-          <input
-            type="file"
-            id="myfile"
-            className="hidden"
-            onChange={handleFileChange}
-          ></input>
+  const handleSubmit = async e => {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      const response = await fetch('/api/user/update', {
+        method: 'PUT',
+        body: JSON.stringify({
+          username: user.username,
+          email: user.email,
+          age: user.age,
+          bio: user.bio,
+        }),
+      });
 
-          <div className="flex flex-col justify-center gap-1">
-            <span className="text-lg font-semibold">User</span>
-            <span className="text-sm ">20 years old</span>
-            <p className="text-sm">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Reprehenderit at debitis accusantium hic! Amet a eum vero
-              consequuntur facere qui.
-            </p>
+      setLoading(false);
+      setSuccessMessage('Updated Profile successfully !');
+      setTimeout(() => {
+        setEditProfileVisible(false);
+        setSuccessMessage('');
+      }, 2000);
+      const newUser = await response.json();
+      setUser(newUser.user);
+      await update({ name: user.username });
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+      setErrorMessage('Something went wrong');
+    }
+  };
+
+  useEffect(() => {
+    const getUserInfo = async () => {
+      try {
+        const response = await fetch(`/api/user?email=${session.user.email}`);
+
+        if (!response.ok) {
+          console.log(response);
+        }
+
+        const userData = await response.json();
+        setUser(userData.user);
+        setLoadingPage(false);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    if (session) {
+      getUserInfo();
+    }
+  }, [session]);
+
+  return loadingPage ? (
+    <Loading />
+  ) : (
+    <div className="relative">
+      <EditProfile
+        user={user}
+        updateUser={setUser}
+        visible={EditProfileVisible}
+        setvisible={setEditProfileVisible}
+        handleSubmit={handleSubmit}
+        loading={loading}
+        errorMessage={errorMessage}
+        successMessage={successMessage}
+      />
+
+      <section className="overflow-hidden pb-[120px] pt-[180px]">
+        <div className="container mx-auto">
+          <div className="bg-slate-200 dark:bg-gray-700 shadow-md rounded-lg p-6 lg:p-10">
+            <div className="flex flex-col lg:flex-row items-center lg:items-start gap-6 lg:gap-12">
+              <label htmlFor="myfile" className="cursor-pointer">
+                <img
+                  src={user.profilePicture || '/images/raed.jfif'}
+                  className="rounded-full w-40 h-40 lg:w-60 lg:h-60 cursor-pointer"
+                  alt="Profile Picture"
+                />
+                <input
+                  type="file"
+                  id="myfile"
+                  className="hidden"
+                  onChange={handleFileChange}
+                />
+              </label>
+
+              <div className="flex flex-col justify-center gap-4 lg:gap-6">
+                <div className="flex flex-col lg:flex-row md:flex-row gap-3 items-center">
+                  <span className="text-2xl lg:text-3xl font-semibold">
+                    {user.username}
+                  </span>
+                  <span className="text-md lg:text-lg text-blue-800 dark:text-blue-400">
+                    {user.email}
+                  </span>
+                  <button
+                    className="bg-transparent hover:bg-blue-500 text-white font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded ml-5"
+                    onClick={() => setEditProfileVisible(true)}
+                  >
+                    Edit info
+                  </button>
+                </div>
+                <span className="text-md lg:text-lg">
+                  {user.age ? user.age : 'Age not defined'}
+                </span>
+                <p className="text-md lg:text-lg">
+                  {user.bio ? user.bio : 'No bio yet'}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-12 bg-slate-200 dark:bg-gray-700 shadow-md rounded-lg p-6 lg:p-10">
+            <h2 className="text-xl lg:text-3xl font-semibold mb-4">
+              Statistics
+            </h2>
+            <div className="flex flex-col gap-4">
+              <span className="text-md lg:text-lg">
+                <strong>Number of Quizzes:</strong> {user.numberOfQuizzes}
+              </span>
+              <span className="text-md lg:text-lg">
+                <strong>Score:</strong> {user.score}
+              </span>
+              <span className="text-md lg:text-lg text-green-500">
+                <strong>Correct Answers:</strong> {user.correctAnswers}
+              </span>
+              <span className="text-md lg:text-lg text-red-500">
+                <strong>Wrong Answers:</strong> {user.wrongAnswers}
+              </span>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
   );
 };
 

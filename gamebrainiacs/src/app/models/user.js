@@ -19,6 +19,35 @@ const MongooseUser = new Schema({
   profilePicture: {
     type: String,
     required: false,
+    default: '',
+  },
+  age: {
+    type: Number,
+    required: false,
+  },
+  bio: {
+    type: String,
+    required: false,
+  },
+  numberOfQuizzes: {
+    type: Number,
+    required: false,
+    default: 0,
+  },
+  score: {
+    type: Number,
+    required: false,
+    default: 0,
+  },
+  wrongAnswers: {
+    type: Number,
+    required: false,
+    default: 0,
+  },
+  correctAnswers: {
+    type: Number,
+    required: false,
+    default: 0,
   },
 });
 const User = models.User || model('User', MongooseUser);

@@ -13,7 +13,6 @@ export const POST = async (req, res) => {
 
   const buffer = Buffer.from(await file.arrayBuffer());
   const filename = file.name.replaceAll(' ', '_');
-  console.log(filename);
   try {
     await writeFile(
       path.join(process.cwd(), 'public/uploads/' + Date.now() + filename),
