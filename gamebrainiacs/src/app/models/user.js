@@ -9,11 +9,10 @@ const MongooseUser = new Schema({
   username: {
     type: String,
     required: [true, 'Username must be provided'],
-    unique: [true, 'Username must be unique'],
   },
   password: {
     type: String,
-    required: [true, 'Password is required'],
+    required: false,
     minlength: [6, 'Password must be at least 6 letters or digits long'],
   },
   profilePicture: {

@@ -5,6 +5,11 @@ export const POST = async (req, res) => {
   try {
     await connectToDB();
     const { username, email, password } = await req.json();
+    const userExists = await User.findOne({ email });
+    if (userExists) {
+      return new Response('User Already exists', { status: 403 });
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new User({
       username,

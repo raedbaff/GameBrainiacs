@@ -1,4 +1,5 @@
 import CredentialsProvider from 'next-auth/providers/credentials';
+import GoogleProvider from 'next-auth/providers/google';
 import User from '../../../models/user';
 import NextAuth from 'next-auth';
 import bcrypt from 'bcrypt';
@@ -42,6 +43,10 @@ const handler = NextAuth({
         }
       },
     }),
+    GoogleProvider({
+      clientId: process.env.CLIENT_ID,
+      clientSecret: process.env.CLIENT_SECRET,
+    }),
   ],
   callbacks: {
     // Using the `...rest` parameter to be able to narrow down the type based on `trigger`
@@ -51,6 +56,25 @@ const handler = NextAuth({
         token.name = session.name;
       }
       return token;
+    },
+    async signIn({ user, account, profile, email, credentials }) {
+      if (account.provider === 'google') {
+        await connectToDB();
+
+        const existingUser = await User.findOne({ email: profile.email });
+
+        if (!existingUser) {
+          const newUser = new User({
+            username: profile.name.replace(/\s/g, '').toLowerCase(),
+            email: profile.email,
+            profilePicture: profile.picture,
+          });
+
+          await newUser.save();
+        }
+        return true;
+      }
+      return true; // For credentials provider, simply return true
     },
   },
 });
