@@ -144,43 +144,48 @@ const Profile = () => {
           </div>
 
           <div className="mt-12 bg-slate-200 dark:bg-gray-700 shadow-md rounded-lg p-6 lg:p-10">
-            <h2 className="text-xl lg:text-3xl font-semibold mb-4">
-              Statistics
-            </h2>
-            <div className="flex flex-col gap-4">
-              <div className="flex justify-between items-center">
-                <span className="text-md lg:text-lg">
-                  <strong>Number of Quizzes:</strong>{' '}
-                  {user.participatedQuizzes.length}
-                </span>
-                <div className="flex flex-col gap-2">
-                  <span className="font-bold">Quizzes Participated in</span>
-                  {user.participatedQuizzes.length === 0 ? (
-                    <span className="text-red-600 cursor-pointer">
-                      Nothing yet ...
-                    </span>
-                  ) : (
-                    user.participatedQuizzes.map((item, index) => (
-                      <span
-                        key={index}
-                        className="text-blue-600 hover:underline cursor-pointer"
-                      >
-                        {item}
-                      </span>
-                    ))
-                  )}
+            <div className="flex flex-row justify-between">
+              <div className="flex flex-col w-1/2">
+                <h2 className="text-xl lg:text-3xl font-semibold mb-4">
+                  Statistics
+                </h2>
+                <div className="flex flex-col gap-4">
+                  <span className="text-md lg:text-lg">
+                    <strong>Number of Quizzes:</strong>{' '}
+                    {user.participatedQuizzes.length}
+                  </span>
+                  <span className="text-md lg:text-lg">
+                    <strong>Score:</strong> {user.score}
+                  </span>
+                  <span className="text-md lg:text-lg text-green-500">
+                    <strong>Correct Answers:</strong> {user.correctAnswers}
+                  </span>
+                  <span className="text-md lg:text-lg text-red-500">
+                    <strong>Wrong Answers:</strong> {user.wrongAnswers}
+                  </span>
                 </div>
               </div>
-
-              <span className="text-md lg:text-lg">
-                <strong>Score:</strong> {user.score}
-              </span>
-              <span className="text-md lg:text-lg text-green-500">
-                <strong>Correct Answers:</strong> {user.correctAnswers}
-              </span>
-              <span className="text-md lg:text-lg text-red-500">
-                <strong>Wrong Answers:</strong> {user.wrongAnswers}
-              </span>
+              <div className="w-0.5 bg-gray-400 mx-4"></div>{' '}
+              {/* Vertical separator */}
+              <div className="flex flex-col w-1/2 gap-2 items-end ">
+                <h2 className="text-xl lg:text-3xl font-semibold mb-4">
+                  Quizzes Participated in
+                </h2>
+                {user.participatedQuizzes.length === 0 ? (
+                  <span className="text-red-600 cursor-pointer">
+                    Nothing yet ...
+                  </span>
+                ) : (
+                  user.participatedQuizzes.map((item, index) => (
+                    <span
+                      key={index}
+                      className="text-blue-600 hover:underline cursor-pointer"
+                    >
+                      {item}
+                    </span>
+                  ))
+                )}
+              </div>
             </div>
           </div>
         </div>
