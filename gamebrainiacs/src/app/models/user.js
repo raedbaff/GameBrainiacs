@@ -28,10 +28,10 @@ const MongooseUser = new Schema({
     type: String,
     required: false,
   },
-  numberOfQuizzes: {
-    type: Number,
+  participatedQuizzes: {
+    type: [String],
     required: false,
-    default: 0,
+    default: [],
   },
   score: {
     type: Number,

@@ -217,7 +217,7 @@ const SignUpForm = () => {
                 </div>
               </form>
               <p className="text-center text-base font-medium text-body-color">
-                Already using Startup?{' '}
+                Already using Brainnicas ?{' '}
                 <Link href="/signin" className="text-primary hover:underline">
                   Sign in
                 </Link>

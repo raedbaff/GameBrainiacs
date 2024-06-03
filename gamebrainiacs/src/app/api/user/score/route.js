@@ -5,16 +5,17 @@ import User from '../../../models/user';
 export const PUT = async (req, res) => {
   try {
     await connectToDB();
-    const { email, username, age, bio } = await req.json();
+    const { email, participatedQuizzes, correctAnswers, wrongAnswers, score } =
+      await req.json();
 
     const response = await User.findOneAndUpdate(
       { email: email },
       {
         $set: {
-          email,
-          username,
-          age,
-          bio,
+          participatedQuizzes,
+          score,
+          wrongAnswers,
+          correctAnswers,
         },
       },
       { returnOriginal: false }
@@ -27,7 +28,7 @@ export const PUT = async (req, res) => {
     const updatedUser = await User.findOne({ email });
 
     return NextResponse.json({
-      message: 'User updated successfully',
+      message: 'User Score updated successfully',
       user: updatedUser,
       status: 200,
     });

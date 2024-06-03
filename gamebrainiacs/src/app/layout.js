@@ -20,11 +20,13 @@ export default function RootLayout({ children }) {
 
       <body className={`bg-[#FCFCFC] dark:bg-black ${inter.className}`}>
         <SessionWrapper>
-          <Providers>
-            <Header />
-            {children}
-            <ScrollToTop />
-          </Providers>
+          <AuthProvider>
+            <Providers>
+              <Header />
+              {children}
+              <ScrollToTop />
+            </Providers>
+          </AuthProvider>
         </SessionWrapper>
       </body>
     </html>

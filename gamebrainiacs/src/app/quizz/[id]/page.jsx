@@ -1,6 +1,9 @@
 'use client';
 import { useEffect, useState } from 'react';
 import QuizzData from './quizzData';
+import { useAuth } from '../../../context/AuthContext';
+import QuizzPopUp from '@/components/QuizzPopup/index';
+import { useRouter } from 'next/navigation';
 
 const page = ({ params }) => {
   const [selectedAnswer, setSelectedAnswer] = useState(null);
@@ -11,7 +14,18 @@ const page = ({ params }) => {
   const [Category, setCategory] = useState('');
   const [filteredQuizzData, setFilteredQuizzData] = useState([]);
   const [seconds, setSeconds] = useState(15);
-
+  const { GlobalUser, fetchUserInfo } = useAuth();
+  const [popupOpen, setpopupOpen] = useState(true);
+  const [startTimer, setStartTimer] = useState(false);
+  const router = useRouter();
+  const handleReady = () => {
+    setpopupOpen(false);
+    setStartTimer(true);
+  };
+  const handleNotReady = () => {
+    setpopupOpen(false);
+    router.push('/quizz');
+  };
   const handleAnswerClick = (index, answer) => {
     setSelectedAnswer(index);
     if (answer.correct == true) {
@@ -24,8 +38,31 @@ const page = ({ params }) => {
     setSeconds(15);
   };
 
-  const showResults = () => {
+  const showResults = async () => {
     setShowResult(true);
+  };
+
+  const updateUserScore = async () => {
+    try {
+      let participatedQuizzes = GlobalUser?.participatedQuizzes || [];
+      if (!participatedQuizzes.includes(decodeURIComponent(params.id))) {
+        participatedQuizzes.push(decodeURIComponent(params.id));
+      }
+      await fetch('/api/user/score', {
+        method: 'PUT',
+        body: JSON.stringify({
+          email: GlobalUser?.email,
+          score: GlobalUser?.score + result,
+          participatedQuizzes: participatedQuizzes,
+          correctAnswers: GlobalUser?.correctAnswers + result,
+          wrongAnswers: GlobalUser?.wrongAnswers + (numberOfQuestions - result),
+        }),
+      });
+      await fetchUserInfo();
+      router.push('/quizz');
+    } catch (error) {
+      console.log(error);
+    }
   };
   const tryAgain = () => {
     setResult(0);
@@ -54,24 +91,51 @@ const page = ({ params }) => {
   }, [Category]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setSeconds(prev => prev - 1);
-    }, 1000);
-    if (seconds == 0) {
-      clearInterval(interval);
-      if (currentQuestionIndex == filteredQuizzData.length - 1) {
-        setShowResult(true);
-      } else {
-        setCurrentQuestionIndex(prev => prev + 1);
-        setSeconds(15);
+    if (startTimer) {
+      const interval = setInterval(() => {
+        setSeconds(prev => prev - 1);
+      }, 1000);
+      if (seconds == 0) {
+        clearInterval(interval);
+        if (currentQuestionIndex == filteredQuizzData.length - 1) {
+          setShowResult(true);
+        } else {
+          setCurrentQuestionIndex(prev => prev + 1);
+          setSeconds(15);
+        }
       }
+      return () => clearInterval(interval);
     }
-    return () => clearInterval(interval);
-  }, [seconds]);
+  }, [seconds, startTimer]);
+
+  useEffect(() => {
+    const handleBeforeUnload = event => {
+      event.preventDefault();
+      event.returnValue = '';
+
+      console.log('User is quitting or going back');
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
 
   return (
     <>
-      <section className="overflow-hidden pb-[120px] pt-[180px]">
+      <section className="relative overflow-hidden pb-[120px] pt-[180px]">
+        <QuizzPopUp
+          isOpen={
+            popupOpen &&
+            !GlobalUser?.participatedQuizzes.includes(
+              decodeURIComponent(params.id)
+            )
+          }
+          handleNotReady={handleNotReady}
+          handleReady={handleReady}
+        />
         <div className="container">
           <div className="-mx-4 flex flex-wrap">
             <div className="w-full px-4 lg:w-8/12">
@@ -82,7 +146,32 @@ const page = ({ params }) => {
                   Reach the Pinnacle of the Leaderboard!
                 </h1>
 
-                {!showResult ? (
+                {GlobalUser?.participatedQuizzes.includes(
+                  decodeURIComponent(params.id)
+                ) ? (
+                  <div className="dark:bg-gray-dark mb-10 rounded-sm bg-white dark:shadow-none p-4 text-center shadow-md">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6 mx-auto mb-2 text-red-500"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 9v2m0 4h.01m-6.4-9.6a9 9 0 1113.41 0c-1.32 1.86-3.93 3.84-6.71 4.1-2.78-.26-5.39-2.24-6.71-4.1z"
+                      />
+                    </svg>
+                    <p className="font-semibold mb-2">
+                      You already participated in this quiz
+                    </p>
+                    <p className="text-sm">
+                      You cannot participate in this quiz again.
+                    </p>
+                  </div>
+                ) : !showResult ? (
                   <div>
                     <div className="p-6 rounded-lg shadow-md dark:bg-gray-dark bg-white">
                       <div className="flex flex-row justify-between">
@@ -159,10 +248,10 @@ const page = ({ params }) => {
                           </span>
                         </div>
                         <button
-                          onClick={() => tryAgain()}
-                          className="inline-flex items-center justify-center rounded-full bg-blue-500 hover:bg-blue-600 px-4 py-2 text-sm font-semibold text-white w-32 transition-colors duration-300"
+                          onClick={() => updateUserScore()}
+                          className="inline-flex items-center justify-center rounded-full bg-blue-500 hover:bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition-colors duration-300"
                         >
-                          Try Again
+                          OK Great, take me to another quizz
                         </button>
                       </div>
                     </div>

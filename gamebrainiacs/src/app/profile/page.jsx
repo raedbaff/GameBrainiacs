@@ -148,9 +148,30 @@ const Profile = () => {
               Statistics
             </h2>
             <div className="flex flex-col gap-4">
-              <span className="text-md lg:text-lg">
-                <strong>Number of Quizzes:</strong> {user.numberOfQuizzes}
-              </span>
+              <div className="flex justify-between items-center">
+                <span className="text-md lg:text-lg">
+                  <strong>Number of Quizzes:</strong>{' '}
+                  {user.participatedQuizzes.length}
+                </span>
+                <div className="flex flex-col gap-2">
+                  <span className="font-bold">Quizzes Participated in</span>
+                  {user.participatedQuizzes.length === 0 ? (
+                    <span className="text-red-600 cursor-pointer">
+                      Nothing yet ...
+                    </span>
+                  ) : (
+                    user.participatedQuizzes.map((item, index) => (
+                      <span
+                        key={index}
+                        className="text-blue-600 hover:underline cursor-pointer"
+                      >
+                        {item}
+                      </span>
+                    ))
+                  )}
+                </div>
+              </div>
+
               <span className="text-md lg:text-lg">
                 <strong>Score:</strong> {user.score}
               </span>

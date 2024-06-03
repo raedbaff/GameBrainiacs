@@ -1,40 +1,39 @@
 'use client';
 
-import Cookies from 'js-cookie';
+import { useSession } from 'next-auth/react';
 import { createContext, useContext, useEffect, useState } from 'react';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [GlobalUser, setGlobalUser] = useState(null);
+  const { data: session } = useSession();
 
   // Moved inside the function
 
-  useEffect(() => {
-    const username = Cookies.get('Username');
+  const fetchUserInfo = async () => {
+    try {
+      const response = await fetch(`/api/user?email=${session.user.email}`);
 
-    if (username) {
-      setUser(username);
-    } else {
-      setUser(null);
+      if (!response.ok) {
+        console.log(response);
+        return;
+      }
+
+      const userData = await response.json();
+      setGlobalUser(userData.user);
+    } catch (error) {
+      console.log(error);
     }
-  }, []);
-
-  const login = (username, token) => {
-    setUser(username);
-    Cookies.set('Username', username);
-    Cookies.set('User-Token', token);
-    return Promise.resolve();
   };
 
-  const logout = async () => {
-    setUser(null);
-    Cookies.remove('Username');
-    Cookies.remove('User-Token');
-    return Promise.resolve();
-  };
+  useEffect(() => {
+    if (session && !GlobalUser) {
+      fetchUserInfo();
+    }
+  }, [session]);
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ GlobalUser, fetchUserInfo }}>
       {children}
     </AuthContext.Provider>
   );
