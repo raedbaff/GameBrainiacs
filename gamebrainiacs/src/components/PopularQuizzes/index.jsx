@@ -9,7 +9,7 @@ const Brands = () => {
         <div className="-mx-4 flex flex-wrap">
           <div className="w-full px-4">
             <SectionTitle
-              title="Most popular quizzes Categories"
+              title="Most popular quizzes"
               paragraph="These are the most popular quizzes for the most popular games out there, Complete the quiz and climb up the leaderboard"
               mb="44px"
             />

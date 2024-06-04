@@ -1,5 +1,5 @@
 'use client';
-import Brands from '@/components/Brands';
+import PopularQuizzes from '@/components/PopularQuizzes';
 import ScrollUp from '@/components/Common/ScrollUp';
 import Hero from '@/components/Hero';
 import Quiz from '@/components/Quiz';
@@ -8,7 +8,7 @@ export default function Home() {
     <>
       <ScrollUp />
       <Hero />
-      <Brands />
+      <PopularQuizzes />
       <Quiz />
     </>
   );

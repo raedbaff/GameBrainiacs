@@ -11,8 +11,8 @@ export const GET = async (req, res) => {
       return NextResponse.json({ error: 'No Users Found' }, { status: 404 });
     }
     const sortedUsers = users.sort((a, b) => b.score - a.score);
-
-    const usersWithoutPassword = sortedUsers.map(user => {
+    const top3Users = sortedUsers.slice(0, 3);
+    const usersWithoutPassword = top3Users.map(user => {
       const { password, ...userWithoutPassword } = user.toObject();
       return userWithoutPassword;
     });

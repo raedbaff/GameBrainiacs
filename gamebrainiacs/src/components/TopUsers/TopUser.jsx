@@ -1,14 +1,10 @@
-import Image from 'next/image';
-const starIcon = (
-  <svg width="18" height="16" viewBox="0 0 18 16" className="fill-current">
-    <path d="M9.09815 0.361679L11.1054 6.06601H17.601L12.3459 9.59149L14.3532 15.2958L9.09815 11.7703L3.84309 15.2958L5.85035 9.59149L0.595291 6.06601H7.0909L9.09815 0.361679Z" />
-  </svg>
-);
+import './TopUser.css';
 
-const TopUser = ({ user }) => {
+const TopUser = ({ user, index }) => {
   const {
     profilePicture,
     username,
+    email,
     participatedQuizzes,
     score,
     wrongAnswers,
@@ -16,8 +12,12 @@ const TopUser = ({ user }) => {
   } = user;
 
   return (
-    <div className="w-full md:w-1/3 px-4 mb-8 p-4 m-4 ">
-      <div className="rounded-sm bg-white p-8 shadow-two duration-300 hover:shadow-one dark:bg-dark dark:shadow-three dark:hover:shadow-gray-dark lg:px-5 xl:px-8">
+    <div
+      className={`w-full md:w-[30%] px-4 mb-8 p-4 m-4 hover:scale-110 cursor-pointer`}
+    >
+      <div
+        className={`rounded-md bg-white p-8 shadow-two duration-300 hover:shadow-one dark:bg-dark dark:shadow-three dark:hover:shadow-gray-dark lg:px-5 xl:px-8 ${index == 0 && 'border border-[#FFD700]'} ${index == 1 && 'border border-cyan-300'} ${index == 2 && ' border border-[#CD7F32]'} `}
+      >
         <div className="mb-5 flex items-center space-x-1">
           Participated in{' '}
           <strong className="text-yellow ml-1">
@@ -25,19 +25,32 @@ const TopUser = ({ user }) => {
           </strong>
         </div>
         <div className="flex flex-col gap-2">
-          <strong>Score {score}</strong>
-          <p>Total Correct answers {correctAnswers} </p>
-          <p>Total Wrong answers {wrongAnswers} </p>
+          <p>
+            Total <strong className="text-bold text-green-400">Correct</strong>{' '}
+            answers {correctAnswers}{' '}
+          </p>
+          <p>
+            Total <strong className="text-bold text-red-500">Wrong</strong>{' '}
+            answers {wrongAnswers}{' '}
+          </p>
           <div className="w-full border-t border-gray-300 my-8"></div>
         </div>
         <div className="flex items-center">
           <div className="relative mr-4 h-[50px] w-full max-w-[50px] overflow-hidden rounded-full">
             <img src={profilePicture} alt={username} />
           </div>
-          <div className="w-full">
-            <h3 className="mb-1 text-lg font-semibold text-dark dark:text-white lg:text-base xl:text-lg">
-              {username}
-            </h3>
+          <div className="w-full flex justify-between">
+            <div className="flex flex-col gap-1">
+              <h3 className="mb-1 text-lg font-semibold text-dark dark:text-white lg:text-base xl:text-lg">
+                {username}
+              </h3>
+              <small className="text-cyan-200">{email}</small>
+            </div>
+            <div
+              className={`w-12 h-12 ${index == 0 && 'bg-[#FFD700]'} ${index == 1 && 'bg-cyan-300'} ${index == 2 && 'bg-[#CD7F32]'} text-black rounded-full flex items-center justify-center text-lg font-bold`}
+            >
+              {score}
+            </div>{' '}
           </div>
         </div>
       </div>

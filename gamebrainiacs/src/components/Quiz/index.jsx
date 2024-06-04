@@ -8,7 +8,7 @@ const Quiz = () => {
   const [users, setUsers] = useState([]);
   const fetchTopUsers = async () => {
     try {
-      const response = await fetch('/api/user/all', {
+      const response = await fetch('/api/user/top3', {
         method: 'GET',
       });
       const data = await response.json();
@@ -30,8 +30,8 @@ const Quiz = () => {
               <SectionTitle title="Top 3 players" paragraph="" mb="44px" />
             </div>
             <div className="flex flex-wrap -mx-4 w-screen">
-              {users?.map(user => (
-                <TopUser key={user._id} user={user} />
+              {users?.map((user, index) => (
+                <TopUser key={user._id} user={user} index={index} />
               ))}
             </div>
           </div>
