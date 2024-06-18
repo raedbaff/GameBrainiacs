@@ -1,4 +1,4 @@
-import React from 'react';
+import QuizzRequestForm from '../../components/QuizzRequestForm';
 import Breadcrumb from '../../components/Common/Breadcrumb';
 
 const quizzRequest = () => {
@@ -9,7 +9,9 @@ const quizzRequest = () => {
         description="Here you can contribute to the quizz database by submitting your own suggestions"
       />
       <section className="overflow-hidden py-16 md:py-20 lg:py-28">
-        <div className="container"></div>
+        <div className="container">
+          <QuizzRequestForm />
+        </div>
       </section>
     </>
   );
