@@ -3,7 +3,7 @@ import GoogleProvider from 'next-auth/providers/google';
 import User from '../../../models/user';
 import NextAuth from 'next-auth';
 import bcrypt from 'bcrypt';
-import { connectToDB } from '@/app/utils/db';
+import { connectToDB } from '../../../utils/db';
 
 const handler = NextAuth({
   session: {

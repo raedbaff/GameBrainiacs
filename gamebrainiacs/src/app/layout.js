@@ -1,12 +1,13 @@
 'use client';
 
-import Header from '@/components/Header';
-import ScrollToTop from '@/components/ScrollToTop';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
+import ScrollToTop from '../components/ScrollToTop';
 import { Inter } from 'next/font/google';
 import '../../node_modules/react-modal-video/css/modal-video.css';
-import { AuthProvider } from '@/context/AuthContext';
+import { AuthProvider } from '../context/AuthContext';
 import './globals.css';
-import SessionWrapper from '@/context/SessionWrapper';
+import SessionWrapper from '../context/SessionWrapper';
 const inter = Inter({ subsets: ['latin'] });
 
 export default function RootLayout({ children }) {
@@ -25,6 +26,7 @@ export default function RootLayout({ children }) {
               <Header />
               {children}
               <ScrollToTop />
+              <Footer />
             </Providers>
           </AuthProvider>
         </SessionWrapper>

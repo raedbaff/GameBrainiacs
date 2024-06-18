@@ -1,8 +1,8 @@
 'use client';
 import { useSession } from 'next-auth/react';
 import React, { useState, useEffect, Suspense } from 'react';
-import EditProfile from '@/components/EditProfile/index';
-import Loading from '@/components/Loading/index';
+import EditProfile from '../../components/EditProfile';
+import Loading from '../../components/Loading';
 
 const Profile = () => {
   const { data: session, update } = useSession();

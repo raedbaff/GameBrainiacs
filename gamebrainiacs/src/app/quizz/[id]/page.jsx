@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import QuizzData from './quizzData';
 import { useAuth } from '../../../context/AuthContext';
-import QuizzPopUp from '@/components/QuizzPopup/index';
+import QuizzPopUp from '../../../components/QuizzPopup/index';
 import { useRouter } from 'next/navigation';
 
 const page = ({ params }) => {

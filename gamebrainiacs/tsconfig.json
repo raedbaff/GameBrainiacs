@@ -1,18 +1,13 @@
 {
   "compilerOptions": {
     "lib": ["dom", "dom.iterable", "esnext"],
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./src/*"]
-    },
     "allowJs": true,
     "skipLibCheck": true,
     "strict": false,
-    "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "incremental": true,
-    "esModuleInterop": true,
     "module": "esnext",
+    "esModuleInterop": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
@@ -25,15 +20,11 @@
   },
   "include": [
     "next-env.d.ts",
-    "src/**/*",
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx",
-    "**/*.jsx",
-    "**/*.js",
-    "src/app/signin/page.jsx",
-    "src/app/signup/page.jsx",
-    "src/app/api/ticket/new/route.js"
+    "src/app/api/ticket/new/route.js",
+    "src/components/Footer/index.jsx"
   ],
   "exclude": ["node_modules"]
 }

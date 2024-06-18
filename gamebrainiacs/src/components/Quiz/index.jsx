@@ -1,8 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import SectionTitle from '../Common/SectionTitle';
-import { UserData } from '@/components/TopUsers/TopUsersData';
-import TopUser from '@/components/TopUsers/TopUser';
+import TopUser from '../../components/TopUsers/TopUser';
 
 const Quiz = () => {
   const [users, setUsers] = useState([]);

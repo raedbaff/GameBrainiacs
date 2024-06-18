@@ -1,5 +1,5 @@
 import { connectToDB } from '../../../utils/db';
-import User from '@/app/models/user';
+import User from '../../../models/user';
 import bcrypt from 'bcrypt';
 export const POST = async (req, res) => {
   try {
